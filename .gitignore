@@ -1,0 +1,10 @@
+*/log/*
+*.Rproj*
+*.idea/*
+*.Rhistory
+*.RData
+*.DS_Store
+*testing.ipynb*
+*log/*
+*.ipynb_checkpoints/*
+*output/*
