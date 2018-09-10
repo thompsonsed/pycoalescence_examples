@@ -1,0 +1,16 @@
+name: pycoalescence-environment
+channels:
+  - conda-forge
+dependencies:
+  - python
+  - numpy
+  - pandas
+  - gdal
+  - libgdal
+  - boost
+  - libboost
+  - cmake
+  - sqlite
+  - pip:
+    - pycoalescence
+    - matplotlib
