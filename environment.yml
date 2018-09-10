@@ -13,3 +13,5 @@ dependencies:
   - cmake
   - sqlite
   - gxx_linux-64
+  - pip:
+    - pycoalescence
