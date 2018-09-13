@@ -1,3 +1,9 @@
 #!/bin/bash
 
-pip install pycoalescence
+git clone https://thompsonsed@bitbucket.org/thompsonsed/pycoalescence.git
+cd pycoalescence
+git checkout develop
+cd pycoalescence/lib
+rm necsim
+git clone https://thompsonsed@bitbucket.org/thompsonsed/necsim.git
+python setup.py install
