@@ -6,4 +6,5 @@ git checkout develop
 cd pycoalescence/lib
 rm necsim
 git clone https://thompsonsed@bitbucket.org/thompsonsed/necsim.git
+cd ../../
 python setup.py install
