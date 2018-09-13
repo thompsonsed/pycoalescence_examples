@@ -1,6 +1,7 @@
 name: pycoalescence-environment
 channels:
   - conda-forge
+  - thompsonsed
 dependencies:
   - python
   - setuptools
@@ -14,8 +15,7 @@ dependencies:
   - cmake
   - sqlite
   - gxx_linux-64
-  - pip:
-    - numpy
-    - scipy
-    - matplotlib
-    - pycoalescence
+  - numpy
+  - scipy
+  - matplotlib
+  - pycoalescence
