@@ -1,6 +1,4 @@
-git clone git@github.com:thompsonsed/staged-recipes.git
-
-cd staged-recipes/recipes
+cd .recipes
 
 conda-build pycoalescence
 conda install --use-local pycoalescence
