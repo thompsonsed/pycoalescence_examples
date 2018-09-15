@@ -1,5 +1,6 @@
 name: pycoalescence-environment
 channels:
+  - defaults
   - conda-forge
 dependencies:
   - python
@@ -17,3 +18,4 @@ dependencies:
   - numpy
   - scipy
   - matplotlib
+  - conda-build
