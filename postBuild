@@ -1,4 +1,1 @@
-cd recipes
-
-conda-build pycoalescence
-conda install --use-local pycoalescence
+pip3 install pycoalescence

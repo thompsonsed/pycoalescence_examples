@@ -17,5 +17,3 @@ dependencies:
   - numpy
   - scipy
   - matplotlib
-  - conda-build
-  - conda-verify
