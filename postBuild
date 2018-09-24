@@ -1,2 +1,0 @@
-conda update conda
-python -m pip install pycoalescence --no-deps --no-cache-dir -vvv
