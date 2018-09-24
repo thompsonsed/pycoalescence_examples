@@ -1,1 +1,1 @@
-pip install pycoalescence --no-deps --ignore-installed --no-cache-dir -vvv
+pip install pycoalescence --no-deps --ignore-installed -vvv
