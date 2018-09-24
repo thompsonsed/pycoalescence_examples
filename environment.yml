@@ -1,6 +1,6 @@
 name: pycoalescence-environment
 channels:
-  - conda-forge
+  - default
 dependencies:
   - python
   - setuptools

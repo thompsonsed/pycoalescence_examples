@@ -1,2 +1,2 @@
-python -m pip install --upgrade pip
-python -m pip install pycoalescence --no-deps -vvv
+conda update conda
+python -m pip install pycoalescence --no-deps --no-cache-dir -vvv
