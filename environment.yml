@@ -15,3 +15,5 @@ dependencies:
   - sqlite
   - gxx_linux-64
   - matplotlib
+  - pip:
+    - pycoalescence==1.2.6rc55
