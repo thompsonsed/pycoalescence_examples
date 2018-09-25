@@ -3,6 +3,7 @@ channels:
   - default
 dependencies:
   - python
+  - pip
   - setuptools
   - numpy
   - pandas
