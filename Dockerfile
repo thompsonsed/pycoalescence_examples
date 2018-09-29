@@ -1,5 +1,5 @@
 # Note that there must be a tag
-FROM thompsonsed/pycoalescence-circleci-0.0.1:c174a6f8cecc
+FROM thompsonsed/pycoalescence-circleci-0.0.1@sha256:a99f010094fecc71c5001ae9f9cdc79417bf3537ea49d8d98453f1d43dde4099
 # install pip
 RUN pip install --no-cache-dir notebook==5.*
 # Create the user
