@@ -19,7 +19,7 @@ USER root
 RUN chown -R ${NB_UID} ${HOME}
 USER ${NB_USER}
 
-RUN pip install -y --no-cache-dir --user pycoalescence
+RUN pip install --no-cache-dir --user pycoalescence
 
 RUN cd {HOME}
 
