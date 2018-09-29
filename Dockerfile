@@ -21,7 +21,7 @@ USER ${NB_USER}
 
 RUN pip install --no-cache-dir --user pycoalescence
 
-RUN cd {HOME}
+RUN cd ${HOME}
 
 # Specify the default command to run
 CMD ["jupyter", "notebook", "--ip", "0.0.0.0"]
