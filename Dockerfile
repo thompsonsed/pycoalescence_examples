@@ -2,7 +2,6 @@
 FROM thompsonsed/pycoalescence-circleci-0.0.1@sha256:a99f010094fecc71c5001ae9f9cdc79417bf3537ea49d8d98453f1d43dde4099
 # install pip
 RUN pip install --no-cache-dir notebook==5.*
-CMD pip3.6 install -y --no-cache-dir pycoalescence
 
 # Create the user
 ENV NB_USER pycoalescence_examples
@@ -20,7 +19,9 @@ USER root
 RUN chown -R ${NB_UID} ${HOME}
 USER ${NB_USER}
 
-CMD cd {HOME}
+RUN pip install -y --no-cache-dir --user pycoalescence
+
+RUN cd {HOME}
 
 # Specify the default command to run
 CMD ["jupyter", "notebook", "--ip", "0.0.0.0"]
