@@ -19,9 +19,9 @@ USER root
 RUN chown -R ${NB_UID} ${HOME}
 USER ${NB_USER}
 
-RUN pip install --no-cache-dir --user pycoalescence
+RUN pip install --no-cache-dir --user pycoalescence pandas
 
 RUN cd ${HOME}
 
 # Specify the default command to run
-CMD ["jupyter", "notebook", "--ip", "0.0.0.0"]
+CMD ["jupyter", "notebook", "--ip", "0.0.0.0", "--notebook-dir",  "${HOME}"]
