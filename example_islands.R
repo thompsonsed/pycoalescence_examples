@@ -1,7 +1,13 @@
 library(tidyverse)
 library(viridis)
 library(ggpubr)
-
+figure_directory <- "../../Reports/pycoalescence/figures"
+# figure_directory <- "figures"
+results_directory <- "results"
+if(!dir.exists(figure_directory)) 
+{
+  dir.create(figure_directory)
+}
 # Read the island results csv
 island_biodiversity <- read.csv(file.path("results", "island_biodiversity.csv")) %>% select(-X) %>%
   mutate(fragmentA = factor(fragmentA, levels = rev(levels(fragmentA))),
@@ -25,6 +31,6 @@ p2 <- island_biodiversity %>% ggplot() +
   theme_classic() + theme(aspect.ratio=1)+
   ggtitle("Similar species")
 out <- ggarrange(p2, p1, ncol=2, nrow=1, common.legend = TRUE, legend="right")
-pdf("../../Figures/MEE_paper/islands_example.pdf", 5, 3)
+pdf(file.path(figure_directory, "islands_example.pdf"), 5, 2.5)
 print(out)
 dev.off()
