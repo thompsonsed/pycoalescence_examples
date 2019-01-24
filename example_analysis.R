@@ -1,8 +1,9 @@
 library(tidyverse)
 library(ggthemr)
+library(ggpubr)
 ggthemr_reset()
 # Define the folder for outputting the figures
-figure_directory <- "../../Reports/pycoalescence/figures"
+figure_directory <- "../../Reports/mee_pycoalescence/figures"
 # figure_directory <- "figures"
 results_directory <- "results"
 if(!dir.exists(figure_directory)) 
@@ -19,30 +20,36 @@ species_abundances <- read.csv(file.path(results_directory, "species_abundances.
   group_by(time, abun_class, seed, speciation_rate) %>% 
   summarise(total = n()) %>% group_by(time, abun_class, speciation_rate) %>% 
   summarise(mean_total = mean(total),
-            sd_total=sd(total),
+            se_total=var(total)/length(total),
             min_q = quantile(total)[2],
             max_q = quantile(total)[4]) %>% 
   replace_na(list(sd_total=0))
 
 # Plot the species richness values
 ggthemr("dust")
-p <- species_richness %>% ggplot(aes(x=time, y=species_richness, 
+p1 <- species_richness %>% 
+  mutate(speciation_rate = factor(speciation_rate, levels=c(0.00001, 0.000005, 0.000001))) %>% 
+  ggplot(aes(x=time, y=species_richness, 
                                      colour=as.factor(speciation_rate),
                                      fill=as.factor(speciation_rate),
                                      group=speciation_rate)) +
-  theme_classic() + xlab("Time before present (generations)") + ylab("Species richness") + 
+  theme_classic() + 
+  geom_rect(aes(xmin=-Inf, xmax=-100, ymin=0, ymax=Inf), colour=NA,fill="grey90", alpha=0.7)+
+  xlab("Time before present (generations)") + ylab("Species richness") + 
   stat_summary(fun.y=mean, geom="line") + 
-  stat_summary(fun.data=mean_se, geom="ribbon", alpha=0.3) +
-  scale_colour_discrete("Speciation\nrate", labels=c("0.0001", "0.0005", "0.001"))+
-  scale_fill_discrete("Speciation\nrate", labels=c("0.0001", "0.0005", "0.001"))+
-  theme(legend.background = element_rect(color = "black", size = 0.5,
-                                         linetype = "solid")) + 
+  stat_summary(fun.data=mean_se, geom="ribbon", alpha=0.3, colour=NA) +
+  scale_colour_discrete("Speciation\nrate", labels=c("0.000001", "0.000005", "0.00001"))+
+  scale_fill_discrete("Speciation\nrate", labels=c("0.000001", "0.000005", "0.00001"))+
+  # theme(legend.background = element_rect(color = "black", size = 0.5,
+                                         # linetype = "solid")) + 
   geom_vline(aes(xintercept=-100), linetype="dotted", colour="black") +
-  annotate("text", label="Real\nlandscape", x=-125, y=75, colour="black")+
-  annotate("text", label="Random\nlandscape", x=-75, y=75, colour="black")
+  geom_vline(aes(xintercept=-50), linetype="dotted", colour="black") +
+  geom_vline(aes(xintercept=0), linetype="dotted", colour="black") +
+  annotate("text", label="Landscape A", x=-125, y=75, colour="black")+
+  annotate("text", label="Landscape B", x=-75, y=75, colour="black")
 
-pdf(file.path(figure_directory, "species_richness_time.pdf"), 4.5, 3)
-print(p)
+pdf(file.path(figure_directory, "species_richness_time.pdf"), 6, 4)
+print(p1)
 dev.off()
 
 # Add in the 0 values for large size classes at time 0
@@ -53,27 +60,34 @@ dev.off()
   # add_row(time=-50, abun_class=8, mean_total=0.1, speciation_rate=c(0.000001, 0.000005, 0.00001))
 
 # Plot the species abundance distributions
-p <- species_abundances %>% filter(speciation_rate == 0.00001) %>% 
-  ggplot(aes(x=2^abun_class, y=mean_total))+
-             # colour=as.factor(speciation_rate), 
-             # fill=as.factor(speciation_rate),
-             # group=speciation_rate)) +
+p2 <- species_abundances %>%
+  mutate(speciation_rate = factor(speciation_rate, levels=c(0.00001, 0.000005, 0.000001))) %>% 
+  ggplot(aes(x=2^abun_class, y=mean_total,
+             colour=speciation_rate,
+             fill=speciation_rate,
+             group=speciation_rate)) +
   theme_classic() + 
   geom_line()+
-  geom_ribbon(aes(ymin=mean_total-sd_total-0.01, ymax=mean_total+sd_total+0.01), colour=NA, alpha=0.5)+
+  geom_ribbon(aes(ymin=mean_total-se_total-0.01, ymax=mean_total+se_total+0.01), alpha=0.5, 
+              colour=NA)+
   # geom_bar(stat="identity", position=position_dodge()) +
   # geom_line(aes(colour=as.factor(time))) +
-  scale_x_continuous("Abundance class", trans="log2", breaks=2^seq(0, 8, 2)) + 
+  scale_x_continuous(expression(paste("Abundance class (", log[2], ")")), trans=scales::log2_trans(),
+                     breaks=scales::trans_breaks("log2", function(x) 2^x, n=6),
+                     labels = scales::trans_format("log2", scales::math_format(.x))) + 
   ylab("Mean number of species")+
-  facet_grid(.~time, labeller = labeller(time = function(x) {return(paste("t =", x))}))+
-  # scale_colour_discrete("Speciation\nrate", labels=c("0.000001", "0.000005", "0.00001"))+
-  # scale_fill_discrete("Speciation\nrate", labels=c("0.000001", "0.000005", "0.00001"))+
-  theme(legend.justification = c(1, 1), legend.position = c(1, 1),
-        legend.box.margin=margin(c(1,0.5,10,10)),
-        legend.background = element_rect(color = "black", size = 0.5,
-                                         linetype = "solid"))
+  facet_grid(speciation_rate~time, labeller = labeller(time = function(x) {return(paste("t =", x))}))+
+  scale_colour_discrete("Speciation\nrate")+
+  scale_fill_discrete("Speciation\nrate")
 
-pdf(file.path(figure_directory, "species_abundances_time.pdf"), 4, 3)
-print(p)
+pdf(file.path(figure_directory, "species_abundances_time.pdf"), 6, 3)
+print(p2)
+dev.off()
+
+gga1 <- ggarrange(NULL, p2, NULL, p1, ncol = 1, nrow=4, legend = "right", common.legend = TRUE,
+                  labels = c("a) SAD", NA, "b) Species richness"), heights=c(0.1, 1, 0.1, 1),
+                  hjust = 0)
+pdf(file.path(figure_directory, "sad_richness.pdf"), 6, 6)
+print(gga1)
 dev.off()
 
