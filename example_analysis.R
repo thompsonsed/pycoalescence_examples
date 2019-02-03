@@ -45,8 +45,8 @@ p1 <- species_richness %>%
   geom_vline(aes(xintercept=-100), linetype="dotted", colour="black") +
   geom_vline(aes(xintercept=-50), linetype="dotted", colour="black") +
   geom_vline(aes(xintercept=0), linetype="dotted", colour="black") +
-  annotate("text", label="Landscape A", x=-125, y=75, colour="black")+
-  annotate("text", label="Landscape B", x=-75, y=75, colour="black")
+  annotate("text", label="Landscape A", x=-125, y=150, colour="black")+
+  annotate("text", label="Landscape B", x=-75, y=150, colour="black")
 
 pdf(file.path(figure_directory, "species_richness_time.pdf"), 6, 4)
 print(p1)

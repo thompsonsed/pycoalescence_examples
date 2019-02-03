@@ -78,11 +78,11 @@ p_richness <- island_biodiversity %>% filter(speciation_rate==1e-3, fragment != 
         plot.background=element_blank(),
         legend.key = element_blank(),
         aspect.ratio=1.0) +
-  scale_colour_viridis("Species\nrichness", option="inferno", begin=0.4, end=0.9)+
+  scale_colour_viridis("", option="inferno", begin=0.4, end=0.9)+
   scale_alpha_continuous(guide=FALSE)+
   scale_size_area(max_size=30, guide=FALSE)+
   geom_point(aes(x=x, y=y, colour=species_richness, size=number_individuals)) + 
-  geom_text(aes(x=x, y=y, label=fragment), colour="black", size=5)+
+  geom_text(aes(x=x, y=y, label=fragment), colour="black", size=7, fontface=2)+
   scale_y_reverse(limits=c(1.2, 0.3))+
   scale_x_continuous(limits=c(0.3, 1.1))
 
@@ -105,15 +105,16 @@ p_endemics <- island_biodiversity %>% filter(speciation_rate==1e-3, fragment != 
         plot.background=element_blank(),
         legend.key = element_blank(),
         aspect.ratio=1.0) +
-  scale_colour_viridis("No.\nendemics", option="viridis", begin=0.4, end=0.9)+
+  scale_colour_viridis("", option="viridis", begin=0.4, end=0.9)+
   scale_alpha_continuous(guide=FALSE)+
   scale_size_area(max_size=30, guide=FALSE)+
   geom_point(aes(x=x, y=y, colour=endemics, size=number_individuals)) + 
-  geom_text(aes(x=x, y=y, label=fragment), colour="black", size=5)+
+  geom_text(aes(x=x, y=y, label=fragment), colour="black", size=7, fontface=2)+
   scale_y_reverse(limits=c(1.2, 0.3))+
   scale_x_continuous(limits=c(0.3, 1.1))
 
-gga1 <- ggarrange(p_richness, p_endemics, nrow=2, ncol=1, align = "v", labels=c("a)", "b)"))
+gga1 <- ggarrange(p_richness, p_endemics, nrow=2, ncol=1, align = "v", 
+                  labels=c("a) Species richness", "b) Endemic richness"))
 
 pdf(file.path(figure_directory, "islands_diversity.pdf"), 3.8, 6)
 print(gga1)
