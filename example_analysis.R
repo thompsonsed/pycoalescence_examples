@@ -3,8 +3,8 @@ library(ggthemr)
 library(ggpubr)
 ggthemr_reset()
 # Define the folder for outputting the figures
-figure_directory <- "../../Reports/mee_pycoalescence/figures"
-# figure_directory <- "figures"
+# figure_directory <- "../../Reports/mee_pycoalescence/figures"
+figure_directory <- "figures"
 results_directory <- "results"
 if(!dir.exists(figure_directory)) 
 {
@@ -40,24 +40,16 @@ p1 <- species_richness %>%
   stat_summary(fun.data=mean_se, geom="ribbon", alpha=0.3, colour=NA) +
   scale_colour_discrete("Speciation\nrate", labels=c("0.000001", "0.000005", "0.00001"))+
   scale_fill_discrete("Speciation\nrate", labels=c("0.000001", "0.000005", "0.00001"))+
-  # theme(legend.background = element_rect(color = "black", size = 0.5,
-                                         # linetype = "solid")) + 
+  geom_vline(aes(xintercept=-150), linetype="dotted", colour="black") +
   geom_vline(aes(xintercept=-100), linetype="dotted", colour="black") +
   geom_vline(aes(xintercept=-50), linetype="dotted", colour="black") +
   geom_vline(aes(xintercept=0), linetype="dotted", colour="black") +
-  annotate("text", label="Landscape A", x=-125, y=150, colour="black")+
-  annotate("text", label="Landscape B", x=-75, y=150, colour="black")
+  annotate("text", label="Landscape A", x=-125, y=275, colour="black")+
+  annotate("text", label="Landscape B", x=-75, y=275, colour="black")
 
 pdf(file.path(figure_directory, "species_richness_time.pdf"), 6, 4)
 print(p1)
 dev.off()
-
-# Add in the 0 values for large size classes at time 0
-# species_abundances <- species_abundances %>% ungroup %>% 
-  # add_row(time=0, abun_class=7, mean_total=0.1, speciation_rate=c(0.000001, 0.000005, 0.00001)) %>%
-  # add_row(time=0, abun_class=8, mean_total=0.1, speciation_rate=c(0.000001, 0.000005, 0.00001)) %>%
-  # add_row(time=-50, abun_class=7, mean_total=0.1, speciation_rate=c(0.000001, 0.000005, 0.00001)) %>%
-  # add_row(time=-50, abun_class=8, mean_total=0.1, speciation_rate=c(0.000001, 0.000005, 0.00001))
 
 # Plot the species abundance distributions
 p2 <- species_abundances %>%
@@ -70,8 +62,6 @@ p2 <- species_abundances %>%
   geom_line()+
   geom_ribbon(aes(ymin=mean_total-se_total-0.01, ymax=mean_total+se_total+0.01), alpha=0.5, 
               colour=NA)+
-  # geom_bar(stat="identity", position=position_dodge()) +
-  # geom_line(aes(colour=as.factor(time))) +
   scale_x_continuous(expression(paste("Abundance class (", log[2], ")")), trans=scales::log2_trans(),
                      breaks=scales::trans_breaks("log2", function(x) 2^x, n=6),
                      labels = scales::trans_format("log2", scales::math_format(.x))) + 
