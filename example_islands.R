@@ -1,8 +1,8 @@
 library(tidyverse)
 library(viridis)
 library(ggpubr)
-figure_directory <- "../../Reports/mee_pycoalescence/figures"
-# figure_directory <- "figures"
+# figure_directory <- "../../Reports/mee_pycoalescence/figures"
+figure_directory <- "figures"
 results_directory <- "results"
 if(!dir.exists(figure_directory)) 
 {
@@ -12,11 +12,6 @@ if(!dir.exists(figure_directory))
 # Generate some coordinates for our islands
 island_coordinates <- data.frame(fragment=c("A", "B", "C", "D"),
                                  x=c(0.5, 1, 0.5, 1), y=c(0.5, 0.45, 1.1, 1))
-# # Create some dummy data for the "sea" between the islands (visual reasons only)
-# sea_data <- expand.grid(endemics=0, fragment=NA, speciation_rate=c(1e-4, 1e-3, 1e-2), 
-#                         species_richness=0, x=seq(0, 4, 1), y=seq(0, 4, 1)) %>% 
-#   filter(!(x %in% c(1, 3) & y %in% c(1, 3)))
-
 # Read the island results csv (the simulation output)
 island_biodiversity <- read.csv(file.path("results", "island_biodiversity.csv")) %>% select(-X) %>% 
   full_join(island_coordinates)
@@ -118,32 +113,4 @@ gga1 <- ggarrange(p_richness, p_endemics, nrow=2, ncol=1, align = "v",
 
 pdf(file.path(figure_directory, "islands_diversity.pdf"), 3.8, 6)
 print(gga1)
-dev.off()
-
-# TODO remove
-# Read the island results csv
-island_biodiversity <- read.csv(file.path("results", "island_biodiversity.csv")) %>% select(-X) %>%
-  mutate(fragmentA = factor(fragmentA, levels = rev(levels(fragmentA))),
-         number_dissimilar = ifelse(number_dissimilar == 0, 1, number_dissimilar))
-  # gather(key = "scenario", value = "species_richness", number_similar, number_dissimilar)
-
-p1 <- island_biodiversity %>% ggplot() + 
-  geom_tile(aes(x=fragmentB, y=fragmentA, fill=number_dissimilar)) + 
-  # facet_grid(.~scenario)+
-  scale_x_discrete("", position="top")+
-  scale_y_discrete("")+
-  scale_fill_viridis("Number of \nspecies", option="magma", trans="log2") + 
-  theme_classic() + theme(aspect.ratio=1)+
-  ggtitle("Dissimilar species")
-p2 <- island_biodiversity %>% ggplot() + 
-  geom_tile(aes(x=fragmentB, y=fragmentA, fill=number_similar)) + 
-  # facet_grid(.~scenario)+
-  scale_x_discrete("", position="top")+
-  scale_y_discrete("")+
-  scale_fill_viridis("Number of \nspecies", option="magma", trans="log2") + 
-  theme_classic() + theme(aspect.ratio=1)+
-  ggtitle("Similar species")
-out <- ggarrange(p2, p1, ncol=2, nrow=1, common.legend = TRUE, legend="right")
-pdf(file.path(figure_directory, "islands_example.pdf"), 5, 2.5)
-print(out)
 dev.off()
