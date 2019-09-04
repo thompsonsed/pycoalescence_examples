@@ -67,6 +67,27 @@ pdf(file.path(figure_directory, "species_richness_time.pdf"), 6, 4)
 print(p1)
 dev.off()
 
+p1x <- species_richness %>% 
+  mutate(speciation_rate = factor(speciation_rate, levels=c(0.00001, 0.000005, 0.000001))) %>% 
+  mutate(time = time + 150) %>% 
+  ggplot(aes(x=time, y=species_richness, 
+             colour=as.factor(speciation_rate),
+             fill=as.factor(speciation_rate),
+             group=speciation_rate)) +
+  theme_classic() + 
+  geom_rect(aes(xmin=-Inf, xmax=50, ymin=0, ymax=Inf), colour=NA,fill="grey90", alpha=0.7)+
+  xlab("Time (generations)") + ylab("Species richness") + 
+  stat_summary(fun.y=mean, geom="line") + 
+  stat_summary(fun.data=mean_se, geom="ribbon", alpha=0.3, colour=NA) +
+  scale_colour_discrete("Speciation\nrate", 
+                        labels=function(x) scales::parse_format()(x_times_ten_notation(x)))+
+  scale_fill_discrete("Speciation\nrate", 
+                      labels=function(x) scales::parse_format()(x_times_ten_notation(x)))
+
+pdf(file.path(figure_directory, "species_richness_time_b.pdf"), 6, 2.8)
+print(p1x)
+dev.off()
+
 # Plot the species abundance distributions
 p2 <- species_abundances %>%
   mutate(speciation_rate = factor(speciation_rate, levels=c(0.00001, 0.000005, 0.000001))) %>%
