@@ -56,10 +56,6 @@ p1 <- species_richness %>%
                         labels=function(x) scales::parse_format()(x_times_ten_notation(x)))+
   scale_fill_discrete("Speciation\nrate", 
                       labels=function(x) scales::parse_format()(x_times_ten_notation(x)))+
-  # geom_vline(aes(xintercept=-150), linetype="dotted", colour="black") +
-  # geom_vline(aes(xintercept=-100), linetype="dotted", colour="black") +
-  # geom_vline(aes(xintercept=-50), linetype="dotted", colour="black") +
-  # geom_vline(aes(xintercept=0), linetype="dotted", colour="black") +
   annotate("text", label="Landscape A", x=25, y=275, colour="black")+
   annotate("text", label="Landscape B", x=75, y=275, colour="black")
 
